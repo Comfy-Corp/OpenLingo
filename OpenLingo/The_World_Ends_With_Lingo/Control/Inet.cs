@@ -6,8 +6,17 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 
-namespace The_World_Ends_With_Lingo.Control
+namespace OpenLingoClient.Control.Net
 {
+    /**
+     * Provide a means of finding other players and constructing a game 
+     * We'll be using our own pseudo Session Description Protocol to become aware of others
+     */
+    class LobbyNet
+    {
+
+    }
+
     class HttpHandler
     {
         private static string wordsListAddress = "http://www-01.sil.org/linguistics/wordlists/english/wordlist/wordsEn.txt";

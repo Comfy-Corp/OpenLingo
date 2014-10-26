@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using The_World_Ends_With_Lingo.Control;
+using OpenLingoClient.Control;
 
-namespace The_World_Ends_With_Lingo
+namespace OpenLingoClient
 {
     static class MainClass
     {

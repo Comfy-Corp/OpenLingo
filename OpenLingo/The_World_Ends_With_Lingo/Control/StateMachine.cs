@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LingoLib;
 
-namespace The_World_Ends_With_Lingo.Control
+namespace OpenLingoClient.Control
 {
     /**
      * State machine controlling the window contents.
@@ -14,7 +14,7 @@ namespace The_World_Ends_With_Lingo.Control
     {
         private static GameStateMachine INSTANCE;
 
-        public GameSession Match;
+        public MatchSession Match;
 
         public int applicationState;
 

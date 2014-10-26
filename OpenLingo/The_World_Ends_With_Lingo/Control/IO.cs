@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using OpenLingoClient.Control.Net;
 using LingoLib;
 
-namespace The_World_Ends_With_Lingo.Control
+namespace OpenLingoClient.Control
 {
     class FileReader
     {

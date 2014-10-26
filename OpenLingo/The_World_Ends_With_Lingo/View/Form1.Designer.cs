@@ -1,4 +1,4 @@
-﻿namespace The_World_Ends_With_Lingo
+﻿namespace OpenLingoClient.View
 {
     partial class Form1
     {

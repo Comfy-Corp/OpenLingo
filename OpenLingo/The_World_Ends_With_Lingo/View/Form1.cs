@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace The_World_Ends_With_Lingo
+namespace OpenLingoClient.View
 {
     public partial class Form1 : Form
     {

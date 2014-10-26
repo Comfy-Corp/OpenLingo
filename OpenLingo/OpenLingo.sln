@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "The_World_Ends_With_Lingo", "The_World_Ends_With_Lingo\The_World_Ends_With_Lingo.csproj", "{58E2563A-BF0D-498D-B87E-825A30D65B32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenLingoClient", "The_World_Ends_With_Lingo\OpenLingoClient.csproj", "{58E2563A-BF0D-498D-B87E-825A30D65B32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LingoLib", "Lingo_Lib\LingoLib.csproj", "{12285E5C-8A4F-4EB4-9C7F-731C93354B57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenLingoLib", "Lingo_Lib\OpenLingoLib.csproj", "{12285E5C-8A4F-4EB4-9C7F-731C93354B57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenLingoServer", "OpenLingoServer\OpenLingoServer.csproj", "{683C215D-2892-473F-BFF4-20905B5228F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{12285E5C-8A4F-4EB4-9C7F-731C93354B57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12285E5C-8A4F-4EB4-9C7F-731C93354B57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12285E5C-8A4F-4EB4-9C7F-731C93354B57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683C215D-2892-473F-BFF4-20905B5228F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683C215D-2892-473F-BFF4-20905B5228F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683C215D-2892-473F-BFF4-20905B5228F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683C215D-2892-473F-BFF4-20905B5228F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

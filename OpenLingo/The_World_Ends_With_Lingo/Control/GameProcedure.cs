@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LingoLib;
 
-namespace The_World_Ends_With_Lingo.Control
+namespace OpenLingoClient.Control
 {
     /**
      * A game starts with deciding the player who goes first
@@ -17,9 +18,11 @@ namespace The_World_Ends_With_Lingo.Control
         /**
          * The Alpha and Omega.
          */
-        public static void PlayGame()
+        public static void PlayMatch()
         {
-            string gameWord = FileReader.GenerateRandomWord(5);
+            MatchSession ms = new MatchSession(FileReader.GenerateRandomWord(5));
+            
+                
         }
     }
 }
