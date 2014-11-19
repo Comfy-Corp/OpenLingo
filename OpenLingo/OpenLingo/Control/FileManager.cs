@@ -160,6 +160,7 @@ namespace OpenLingoClient.Control
                 catch (FileNotFoundException)
                 {
                     getNewWordsList();
+                    continue;
                 }
                 catch (DirectoryNotFoundException)
                 {

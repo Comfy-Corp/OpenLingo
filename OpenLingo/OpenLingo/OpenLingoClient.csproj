@@ -59,7 +59,7 @@
     <Compile Include="Control\Config.cs" />
     <Compile Include="Control\GameProcedure.cs" />
     <Compile Include="Control\Inet.cs" />
-    <Compile Include="Control\IO.cs" />
+    <Compile Include="Control\FileManager.cs" />
     <Compile Include="Control\StateMachine.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>

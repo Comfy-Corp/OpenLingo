@@ -12,6 +12,10 @@ namespace OpenLingoServer.Control
 
     }
 
+    class LobbyPool
+    {
+
+    }
 
     class UserHandler
     {

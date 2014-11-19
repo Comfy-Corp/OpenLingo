@@ -29,6 +29,26 @@ namespace OpenLingoClient.Control
                 }
         }
 
+        public static int WordLength
+        {
+            get { return conf.WordLength; }
+            set
+            {
+                conf.WordLength = value;
+                SaveConfig();
+            }
+        }
+
+        public static Player LocalPlayer
+        {
+            get { return conf.LocalPlayer; }
+            set
+            {
+                conf.LocalPlayer = value;
+                SaveConfig();
+            }
+        }
+
         static Config()
         {
             LoadConfig();

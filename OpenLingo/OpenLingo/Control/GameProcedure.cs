@@ -20,8 +20,33 @@ namespace OpenLingoClient.Control
          */
         public static void PlayMatch()
         {
-            MatchSession ms = new MatchSession(FileManager.GenerateRandomWord(5));
-            
+            //Host/server should make this, transmit to client(s)
+            MatchSession ms = new MatchSession(FileManager.GenerateRandomWord(Config.WordLength), Config.LocalPlayer);
+            Console.WriteLine(ms.Progression);
+            char[] clearCondition = new char[ms.CurrentWord.Length];
+            for (int i = 0; i < ms.CurrentWord.Length; i++)
+			{
+			    clearCondition[i] = '+';
+			}
+            while (ms.Progression != new string(clearCondition))
+            {
+                string guess = Console.ReadLine();
+                if (guess == "QUIT")
+                    break;
+                if (guess == "GIVE UP")
+                    Console.WriteLine("Answer: "+ms.CurrentWord);
+                else
+                    guess = guess.ToLower();
+                if (guess.Length == ms.CurrentWord.Length && FileManager.WordsListContains(guess))
+                {
+                    ms.Progression = MatchSession.MatchGuess(guess, ms.CurrentWord);
+                    Console.WriteLine(ms.Progression+" :Progression");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid guess, lose turn!");
+                }
+            }
         }
     }
 }

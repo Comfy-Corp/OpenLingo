@@ -16,6 +16,7 @@ namespace LingoLib
         public int WordsListVersion;
         public int WordLength;   //How long are the in-game words?
         public int MatchAmount;  //how many matches will be played?
+        public Player LocalPlayer;
 
         public ConfigParameters()
         {

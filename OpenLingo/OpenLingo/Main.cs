@@ -20,8 +20,10 @@ namespace OpenLingoClient
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());*/
             Console.Title = "OpenLingo - Debug";
-
-            int wordlength = 5;
+            if (Config.LocalPlayer == null)
+                Config.LocalPlayer = new Player("Default");
+            if (Config.WordLength == null)    
+                Config.WordLength = 5;
             string input = "void";
             
             while (Config.Language == LANGUAGE.NONE)
@@ -44,7 +46,7 @@ namespace OpenLingoClient
             Console.WriteLine("Use numbers to change length.");
 
             //user IO
-            while (input != string.Empty)
+            while (input != "quit")
             {
                 Console.Write('>');
                 input = Console.ReadLine();
@@ -65,7 +67,7 @@ namespace OpenLingoClient
                             Console.WriteLine("Language is "+Config.Language);
                             break;
                         case "give":
-                            string randomWord = FileManager.GenerateRandomWord(wordlength);
+                            string randomWord = FileManager.GenerateRandomWord(Config.WordLength);
                             if (randomWord != null)
                                 Console.WriteLine(randomWord);
                             else
@@ -73,6 +75,9 @@ namespace OpenLingoClient
                             break;
                         case "ver":
                             Console.WriteLine("Words list Version: "+Config.WordsListVersion);
+                            break;
+                        case "play":
+                            GameProcedure.PlayMatch();
                             break;
                         default:
                             if (FileManager.WordsListContains(input.ToLower().Trim()))
@@ -84,8 +89,8 @@ namespace OpenLingoClient
                 }
                 else
                 {
-                    wordlength = temp;
-                    Console.WriteLine("Words will be " + wordlength + " letters.");
+                    Config.WordLength = temp;
+                    Console.WriteLine("Words will be " + Config.WordLength + " letters.");
                 }
             }
         }

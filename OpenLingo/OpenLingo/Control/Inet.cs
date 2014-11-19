@@ -48,22 +48,30 @@ namespace OpenLingoClient.Control.Net
             int versionNo;
             if (Config.Language == LingoLib.LANGUAGE.DUTCH) //Only works for Guus's version system
             {
-                using (var client = new WebClient())
-                using (StreamReader downloadStream = new StreamReader(client.OpenRead(wordsListAddress)))
+                try
                 {
-                    string version = downloadStream.ReadLine();
-                    if (version.StartsWith("v="))
+                    using (var client = new WebClient())
+                    using (StreamReader downloadStream = new StreamReader(client.OpenRead(wordsListAddress)))
                     {
-                        if (int.TryParse(version.Substring(2, 1), out versionNo))
+                        string version = downloadStream.ReadLine();
+                        if (version.StartsWith("v="))
                         {
-                            if (Config.WordsListVersion < versionNo)
+                            if (int.TryParse(version.Substring(2, 1), out versionNo))
                             {
-                                retval = true;
-                                Config.WordsListVersion = versionNo;
-                                FileManager.WordListDispose();
+                                if (Config.WordsListVersion < versionNo)
+                                {
+                                    retval = true;
+                                    Config.WordsListVersion = versionNo;
+                                    FileManager.WordListDispose();
+                                }
                             }
                         }
                     }
+                }
+                catch (WebException e)
+                {
+                    if(e.HResult == 404)
+                        Console.WriteLine("No wordslist available");
                 }
             }
             return retval;
@@ -90,7 +98,7 @@ namespace OpenLingoClient.Control.Net
                         {
                             FileManager.WordListBuild(word);
                             count++;
-                            if ((count % 2000 == 0))
+                            if ((count % 500 == 0))
                             {
 
                                 int currentLineCursor = Console.CursorTop;
