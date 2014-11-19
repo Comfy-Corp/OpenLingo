@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace OpenLingoServer
 {
-    class Program
+    class MainClass
     {
         static void Main(string[] args)
         {
+    
         }
     }
 }

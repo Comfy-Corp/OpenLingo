@@ -16,10 +16,10 @@ namespace LingoLib
     public class MatchSession
     {
         public List<Player> Players;
-        int turn { public get; private set; } //Matches Players index
-        public LinkedList<KeyValuePair<String,String>> attempts; //String attempt, String
-        string currentWord { public get; private set; }
-        public string progression;
+        public int Turn { get; private set; } //Matches Players index
+        public LinkedList<KeyValuePair<String,String>> Attempts; //String attempt, String
+        public string CurrentWord { get; private set; }
+        public string Progression;
 
         /**
          * Construct a match in a game of lingo with parameter word as answer
@@ -27,22 +27,22 @@ namespace LingoLib
          */
         public MatchSession(string currentWord)
         {
-            this.currentWord = currentWord;
-            turn = new Random().Next() % Players.Count;
-            attempts = new LinkedList<KeyValuePair<string, string>>();
+            this.CurrentWord = currentWord;
+            Turn = new Random().Next() % Players.Count;
+            Attempts = new LinkedList<KeyValuePair<string, string>>();
             Players = new List<Player>();
             char[] prog = new char[currentWord.Length];
             for (int i = 0; i < currentWord.Length; i++)
             {
                 prog[i] = '.';
             }
-            progression = new string(prog);
+            Progression = new string(prog);
         }
 
         public void NextTurn()
         {
-            turn++;
-            turn %= Players.Count;
+            Turn++;
+            Turn %= Players.Count;
         }
     }
 
@@ -52,8 +52,8 @@ namespace LingoLib
      */
     public class Player
     {
-        public int score;
-        public string name;
+        public int Score;
+        public string Name;
     }
 
     public enum MatchStates

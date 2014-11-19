@@ -20,9 +20,8 @@ namespace OpenLingoClient.Control
          */
         public static void PlayMatch()
         {
-            MatchSession ms = new MatchSession(FileReader.GenerateRandomWord(5));
+            MatchSession ms = new MatchSession(FileManager.GenerateRandomWord(5));
             
-                
         }
     }
 }

@@ -4,10 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LingoLib
+namespace OpenLingoServer.Control
 {
-    public class NetHandler
+    //Pool's open, get your swimming trunks
+    class UserPool
     {
-        //Put net stuff here.
+
+    }
+
+
+    class UserHandler
+    {
+
     }
 }
