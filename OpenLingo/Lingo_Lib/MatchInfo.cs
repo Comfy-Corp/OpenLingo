@@ -34,7 +34,7 @@ namespace LingoLib
             Turn = new Random().Next() % Players.Count;
             Attempts = new LinkedList<KeyValuePair<string, string>>();
             char[] prog = new char[currentWord.Length];
-            prog[0] = currentWord[0];
+            prog[0] = '+';
             for (int i = 1; i < currentWord.Length; i++)
             {
                 prog[i] = '.';
@@ -70,8 +70,11 @@ namespace LingoLib
                 {
                     if (temp.Contains(guess[i]))
                     {
-                        prog[i] = '-';
-                        temp[currentWord.IndexOf(guess[i])] = '.';
+                        if (!guess.Substring(i+1).Contains(guess[i])) //If there is not another of this char
+                        {
+                            prog[i] = '-';
+                            temp[currentWord.IndexOf(guess[i])] = '.';
+                        }
                     }
                     else
                     {

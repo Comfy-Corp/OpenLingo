@@ -20,6 +20,7 @@ namespace OpenLingoClient
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());*/
             Console.Title = "OpenLingo - Debug";
+            Console.ForegroundColor = ConsoleColor.White;
             if (Config.LocalPlayer == null)
                 Config.LocalPlayer = new Player("Default");
             if (Config.WordLength == null)    
@@ -77,7 +78,8 @@ namespace OpenLingoClient
                             Console.WriteLine("Words list Version: "+Config.WordsListVersion);
                             break;
                         case "play":
-                            GameProcedure.PlayMatch();
+                            GameProcedure p = new GameProcedure();
+                            p.PlayMatch();
                             break;
                         default:
                             if (FileManager.WordsListContains(input.ToLower().Trim()))

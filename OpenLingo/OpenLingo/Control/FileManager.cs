@@ -149,7 +149,10 @@ namespace OpenLingoClient.Control
                         while (((line = sr.ReadLine()) != null))
                         {
                             line = line.ToLower().Trim();
-                            if ((line.Length == lettersNo) && (random.Next(count++) == 0))
+                            if (line.Length > 0 && 
+                                char.IsLower(line[0]) &&
+                                (line.Length == lettersNo) &&
+                                (random.Next(count++) == 0)) //Word limiting rules
                             {
                                 randomWord = line;
                                 result = true; //If we get even anything as a reponse, we've gotten past the important parts.
