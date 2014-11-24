@@ -20,7 +20,7 @@ namespace OpenLingoClient
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());*/
             Console.Title = "OpenLingo - Debug";
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
             if (Config.LocalPlayer == null)
                 Config.LocalPlayer = new Player("Default");
             if (Config.WordLength == null)    

@@ -48,7 +48,7 @@ namespace OpenLingoClient.Control
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Answer: " + ms.CurrentWord);
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     return;
                 }
                 else
@@ -64,12 +64,12 @@ namespace OpenLingoClient.Control
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Invalid guess, lose turn!");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
             }
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Congratulations!");
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         public void DisplayProgress()
@@ -105,7 +105,7 @@ namespace OpenLingoClient.Control
                 }
                 System.Threading.Thread.Sleep(100);
             }
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Gray;
             Console.Write('\n');
         }
     }
