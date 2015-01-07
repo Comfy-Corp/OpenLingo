@@ -18,9 +18,10 @@ namespace LingoLib
     {
         public List<Player> Players;
         public int Turn { get; private set; } //Matches Players index
-        public LinkedList<KeyValuePair<String, String>> Attempts; //String attempt, String progression
+        public List<KeyValuePair<String, String>> Attempts; //String attempt, String progression
         public string CurrentWord { get; private set; }
         public string Progression;
+        public int maxAttempts; 
 
         /**
          * Construct a match in a game of lingo with parameter word as answer
@@ -32,7 +33,7 @@ namespace LingoLib
             Players = new List<Player>();
             Players.Add(host); //Host first
             Turn = new Random().Next() % Players.Count;
-            Attempts = new LinkedList<KeyValuePair<string, string>>();
+            Attempts = new List<KeyValuePair<string, string>>();
             char[] prog = new char[currentWord.Length];
             prog[0] = '+';
             for (int i = 1; i < currentWord.Length; i++)
@@ -70,15 +71,11 @@ namespace LingoLib
                 {
                     if (temp.Contains(guess[i]))
                     {
-                        if (!guess.Substring(i+1).Contains(guess[i])) //If there is not another of this char
+                        if (!guess.Substring(i + 1).Contains(guess[i])) //If there is not another of this char
                         {
                             prog[i] = '-';
                             temp[currentWord.IndexOf(guess[i])] = '.';
                         }
-                    }
-                    else
-                    {
-                        prog[i] = '.';
                     }
                 }
                 currentWord = new string(temp);

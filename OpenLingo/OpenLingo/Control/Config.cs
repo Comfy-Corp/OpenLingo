@@ -29,6 +29,16 @@ namespace OpenLingoClient.Control
                 }
         }
 
+        public static int GuessAttempts
+        {
+            get { return conf.GuessAttempts; }
+            set
+            {
+                conf.GuessAttempts = value;
+                SaveConfig();
+            }
+        }
+
         public static int WordLength
         {
             get { return conf.WordLength; }

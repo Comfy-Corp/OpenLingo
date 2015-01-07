@@ -9,6 +9,7 @@ namespace OpenLingoClient.Control
 {
     /**
      * State machine controlling the window contents.
+     * WHAT IS THIS EVEN FOR OH GOD REMOVE THIS RELIC OF THE PAST PLEASE
      */
     class GameStateMachine
     {

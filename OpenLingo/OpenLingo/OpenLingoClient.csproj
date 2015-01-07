@@ -60,7 +60,11 @@
     <Compile Include="Control\GameProcedure.cs" />
     <Compile Include="Control\Inet.cs" />
     <Compile Include="Control\FileManager.cs" />
+    <Compile Include="Control\MatchProcedure.cs" />
     <Compile Include="Control\StateMachine.cs" />
+    <Compile Include="View\ConsoleDebugView.cs" />
+    <Compile Include="View\ConsoleView.cs" />
+    <Compile Include="View\DebugView.cs" />
     <Compile Include="View\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +73,9 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\IDebugViewBridge.cs" />
+    <Compile Include="View\MainView.cs" />
+    <Compile Include="View\IViewBridge.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

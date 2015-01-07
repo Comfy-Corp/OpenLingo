@@ -14,17 +14,25 @@ namespace OpenLingoClient
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (args[0] == "-debug")
+                View.MainView.SetView(View.ViewStates.VIEW_CONSOLE);
+            else
+                View.MainView.SetView(View.ViewStates.VIEW_FORM);
             /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());*/
             Console.Title = "OpenLingo - Debug";
             Console.ForegroundColor = ConsoleColor.Gray;
+
             if (Config.LocalPlayer == null)
                 Config.LocalPlayer = new Player("Default");
-            if (Config.WordLength == null)    
+            if (Config.WordLength == 0)  //A word is never allowed to be of length 0 or lower
                 Config.WordLength = 5;
+            if (Config.GuessAttempts == 0) //Same goes for the amount of attempts, unless I decide to implement -1 as infite guesses
+                Config.GuessAttempts = 5;
+
             string input = "void";
             
             while (Config.Language == LANGUAGE.NONE)
