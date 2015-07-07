@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenLingoClient.View;
 using LingoLib;
 
 namespace OpenLingoClient.Control
@@ -10,14 +11,13 @@ namespace OpenLingoClient.Control
     /**
      * Handle a match within a game, this is one player
      */
-    class MatchProcedure
+    public class MatchProcedure
     {
         private MatchSession ms;
 
         public MatchProcedure()
         {
-            //ms = new MatchSession("sever", Config.LocalPlayer);
-            ms = new MatchSession(FileManager.GenerateRandomWord(Config.WordLength), Config.LocalPlayer);
+            ms = new MatchSession(FileManager.GenerateRandomWord(Config.WordLength));
         }
 
         public MatchProcedure(MatchSession ms) //Continue previous match session?
@@ -26,11 +26,14 @@ namespace OpenLingoClient.Control
         }
 
         /**
-         * The centerpiece of a Lingo match
-         * TODO: return results
+         * A match is a single guessing game
+         * Returns the result (WIN, LOSE or DRAW)
          */
-        public void PlayMatch()
+        public MatchResultType PlayMatch()
         {
+            //Create view
+            MatchView display = new MatchView(MatchView.ViewTypes.VIEW_CONSOLE);
+            MatchResultType retVal = MatchResultType.DRAW;
             ms.maxAttempts = Config.GuessAttempts;
             //Host/server should make this, transmit to client(s)
             char[] clearCondition = new char[ms.CurrentWord.Length];
@@ -39,17 +42,17 @@ namespace OpenLingoClient.Control
                 clearCondition[i] = '+';
             }
 
-            View.MainView.ViewInterface.MatchDisplayStart(ms);
+            display.MatchDisplayStart(ms);
             //Console.WriteLine("Answer: {0}", ms.CurrentWord);
             while (ms.Progression != new string(clearCondition) && ms.Attempts.Count < ms.maxAttempts)
-            {        
-                string guess = View.MainView.ViewInterface.MatchPromptGuess();
+            {
+                string guess = display.MatchPromptGuess();
                 if (guess == "I quit")
-                    return;
+                    return MatchResultType.LOSE;
                 else if (guess == "I give up")
                 {
-                    View.MainView.ViewInterface.MatchDispayAnswer(ms.CurrentWord);
-                    return;
+                    display.MatchDispayAnswer(ms.CurrentWord);
+                    return MatchResultType.LOSE;
                 }
                 else
                 {
@@ -58,23 +61,27 @@ namespace OpenLingoClient.Control
                 if (guess.Length == ms.CurrentWord.Length && FileManager.WordsListContains(guess))
                 {
                     ms.Progression = MatchSession.MatchGuess(guess, ms.CurrentWord);
-                    View.MainView.ViewInterface.MatchDisplayProgress(ms, guess);
+                    display.MatchDisplayProgress(ms, guess);
                 }
                 else
                 {
-                    View.MainView.ViewInterface.MatchDisplayIncorrect(ms);
+                    display.MatchDisplayIncorrect(ms);
                 }
                 ms.Attempts.Add(new KeyValuePair<string,string>(guess, ms.Progression));
-                ms.NextTurn();
             }
             if (ms.Progression == new string(clearCondition))
             {
-                View.MainView.ViewInterface.MatchDisplayWin();
+                retVal = MatchResultType.WIN;
+                display.MatchDisplayWin();
             }
             else
             {
-                View.MainView.ViewInterface.MatchDisplayLose(ms);
+                retVal = MatchResultType.WIN;
+                //I want to move the display function up to GameProcedure,
+                //but it should still be able to access the information of the session
+                display.MatchDisplayLose(ms);
             }
+            return retVal;
         }
     }
 }

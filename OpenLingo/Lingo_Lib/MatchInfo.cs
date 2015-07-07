@@ -16,23 +16,18 @@ namespace LingoLib
     [Serializable]
     public class MatchSession
     {
-        public List<Player> Players;
-        public int Turn { get; private set; } //Matches Players index
         public List<KeyValuePair<String, String>> Attempts; //String attempt, String progression
-        public string CurrentWord { get; private set; }
-        public string Progression;
-        public int maxAttempts; 
+        public string CurrentWord { get; private set; }     //Answer to the riddle
+        public string Progression;                          //The latest valid progress made
+        public int maxAttempts;                             //Amount of attempts possible untill LOSE condition
 
         /**
          * Construct a match in a game of lingo with parameter word as answer
          * player will be the index of which player starts.
          */
-        public MatchSession(string currentWord, Player host)
+        public MatchSession(string currentWord)
         {
             this.CurrentWord = currentWord;
-            Players = new List<Player>();
-            Players.Add(host); //Host first
-            Turn = new Random().Next() % Players.Count;
             Attempts = new List<KeyValuePair<string, string>>();
             char[] prog = new char[currentWord.Length];
             prog[0] = '+';
@@ -43,12 +38,6 @@ namespace LingoLib
             Progression = new string(prog);
         }
 
-        public void NextTurn()
-        {
-            Turn++;
-            Turn %= Players.Count;
-        }
-
         /**
          * + Right letter at right place
          * - Right letter at wrong place
@@ -57,30 +46,38 @@ namespace LingoLib
          */
         public static string MatchGuess(string guess, string currentWord)
         {
-            char[] prog = new char[currentWord.Length];
-            char[] temp = currentWord.ToCharArray();
-            
-            for (int i = 0; i < currentWord.Length; i++)
+            char[] tempGuess = guess.ToLower().Trim().ToCharArray();
+            char[] tempCurrentWord = currentWord.ToLower().Trim().ToCharArray();
+            char[] retVal = new char[guess.Length];
+
+            for (int i = 0; i < tempGuess.Length; i++)
             {
-                if (temp[i] == guess[i])
+                if (tempGuess[i] == tempCurrentWord[i])
                 {
-                    prog[i] = '+';
-                    temp[i] = '.';
+                    retVal[i] = '+';
+                    tempGuess[i] = ' ';
+                    tempCurrentWord[i] = ' ';
                 }
-                else
+            }
+            for (int i = 0; i < tempGuess.Length; i++)
+            {
+                if (tempGuess[i] != ' ')
                 {
-                    if (temp.Contains(guess[i]))
+                    int matchPosition = Array.IndexOf(tempCurrentWord, tempGuess[i]);
+                    if (matchPosition != -1)
                     {
-                        if (!guess.Substring(i + 1).Contains(guess[i])) //If there is not another of this char
-                        {
-                            prog[i] = '-';
-                            temp[currentWord.IndexOf(guess[i])] = '.';
-                        }
+                        retVal[i] = '-';
+                        tempGuess[i] = ' ';
+                        tempCurrentWord[matchPosition] = ' ';
                     }
                 }
-                currentWord = new string(temp);
             }
-            return new string(prog);
+            for (int i = 0; i < retVal.Length; i++)
+            {
+                if (Char.IsLetter(retVal[i]))
+                    retVal[i] = '+';
+            }
+            return new string(retVal);
         }
     }
 
@@ -100,10 +97,10 @@ namespace LingoLib
         }
     }
 
-    public enum MatchStates
+    public enum MatchResultType
     {
-        MENU = 1,
-        IN_GAME = 2,
-        GAME_OVER = 3
+        WIN  = 1,
+        DRAW = 2,
+        LOSE = 3
     }
 }

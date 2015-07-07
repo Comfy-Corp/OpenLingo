@@ -8,9 +8,10 @@ using LingoLib;
 namespace OpenLingoClient.Control
 {
     //Small abstraction layer for config
-    static class Config
+    public static class Config
     {
         private static ConfigParameters conf;
+        public static bool IsDebug = false; //Changes IO method
 
         public static LANGUAGE Language
         {
@@ -29,29 +30,48 @@ namespace OpenLingoClient.Control
                 }
         }
 
-        public static int GuessAttempts
+        public static int GuessAttempts //Word length may not be 0
         {
-            get { return conf.GuessAttempts; }
+            get
+            {
+                if (conf.GuessAttempts == 0)
+                    GuessAttempts = 1;
+                return conf.GuessAttempts;
+            }
             set
             {
-                conf.GuessAttempts = value;
+                if (value == 0)
+                    conf.GuessAttempts = 1;
+                else
+                    conf.GuessAttempts = value;
                 SaveConfig();
             }
         }
 
-        public static int WordLength
+        public static int WordLength //Word length may not be below 1
         {
-            get { return conf.WordLength; }
+            get {
+                if (conf.WordLength <= 0)
+                    WordLength = 1;
+                return conf.WordLength;
+            }
             set
             {
-                conf.WordLength = value;
+                if (value <= 0)
+                    conf.WordLength = 1;
+                else
+                    conf.WordLength = value;
                 SaveConfig();
             }
         }
 
         public static Player LocalPlayer
         {
-            get { return conf.LocalPlayer; }
+            get {
+                if (conf.LocalPlayer == null)
+                    LocalPlayer = new Player("Default");
+                return conf.LocalPlayer; 
+            }
             set
             {
                 conf.LocalPlayer = value;

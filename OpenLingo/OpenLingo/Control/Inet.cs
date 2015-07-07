@@ -11,7 +11,6 @@ namespace OpenLingoClient.Control.Net
 {
     /**
      * Provide a means of finding other players and constructing a game 
-     * We'll be using our own pseudo Session Description Protocol to become aware of others
      */
     class LobbyNet
     {
