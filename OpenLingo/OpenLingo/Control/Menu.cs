@@ -108,6 +108,23 @@ namespace OpenLingoClient.Control
                         {
 
                         }));
+                CommandsList.Add(new MenuCommand("Card",
+                        "Generate a card",
+                        delegate(string paramers){
+                            new GameProcedure();
+                        }));
+                CommandsList.Add(new MenuCommand("NetTest",
+                    "Ping the server",
+                    delegate(string parameters)
+                    {
+                        if(Net.LobbyNet.Client.Init())
+                        {
+                            System.Console.WriteLine("Connection established.");
+                            Net.LobbyNet.Client.Ping();
+                        }
+
+                    }));
+
                 CommandsList.Add(new MenuCommand("Help",
                         "This help command.",
                         delegate(string parameters)

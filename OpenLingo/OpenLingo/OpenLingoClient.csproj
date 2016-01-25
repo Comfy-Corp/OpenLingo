@@ -58,7 +58,8 @@
   <ItemGroup>
     <Compile Include="Control\Config.cs" />
     <Compile Include="Control\GameProcedure.cs" />
-    <Compile Include="Control\Inet.cs" />
+    <Compile Include="Control\Inet\ClientCommands.cs" />
+    <Compile Include="Control\Inet\Inet.cs" />
     <Compile Include="Control\FileManager.cs" />
     <Compile Include="Control\MatchProcedure.cs" />
     <Compile Include="Control\Menu.cs" />

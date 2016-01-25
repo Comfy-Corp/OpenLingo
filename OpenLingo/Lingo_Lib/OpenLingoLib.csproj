@@ -41,8 +41,10 @@
   <ItemGroup>
     <Compile Include="Config.cs" />
     <Compile Include="GameInfo.cs" />
+    <Compile Include="LingoProtocol.cs" />
     <Compile Include="MatchInfo.cs" />
     <Compile Include="NetHandling.cs" />
+    <Compile Include="Package.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
