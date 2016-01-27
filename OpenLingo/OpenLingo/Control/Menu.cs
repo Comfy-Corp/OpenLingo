@@ -39,12 +39,23 @@ namespace OpenLingoClient.Control
         {
 
             if (Config.Language == LANGUAGE.NONE)
-                Screen.MenuSetLanguagePrompt();
-
+            {
+                switch(Screen.MenuSetLanguagePrompt().Trim().ToLower()){
+                    case "nl":
+                        Config.Language = LANGUAGE.DUTCH;
+                        break;
+                    case "en":
+                        Config.Language = LANGUAGE.ENGLISH;
+                        break;
+                    default:
+                        Console.WriteLine("Unrecognised input, defaulting to NL. You can change this with the Lang command");
+                        Config.Language = LANGUAGE.DUTCH;
+                        break;
+                 }
+            }
             string input = Screen.MenuRead();
             input.ToLower().Trim();
             string command = input.Split()[0];
-            Console.WriteLine("Command: " + command);
             string parameters = string.Empty;
             if (input.Contains(' '))
                 parameters = input.Substring(input.IndexOf(' '));
@@ -91,7 +102,7 @@ namespace OpenLingoClient.Control
                 MenuCommand result = null;
                 foreach (MenuCommand c in MenuCommands.CommandsList)
                 {
-                    if (c.Name.ToLower() == commandName)
+                    if (c.Name.Trim().ToLower() == commandName.Trim().ToLower())
                     {
                         result = c;
                     }
@@ -108,21 +119,55 @@ namespace OpenLingoClient.Control
                         {
 
                         }));
+                CommandsList.Add(new MenuCommand("Lobby",
+                    "Enter the server's player lobby",
+                    delegate(string parameters)
+                    {
+                        if (parameters.Trim().ToLower() == "join")
+                        {
+                            List<PlayerInfo> peers = Net.LobbyNet.Client.ConnectToLobby();
+                            foreach (var peer in peers)
+                            {
+                                System.Console.WriteLine(peer.Username);
+                            }
+                        }
+                        else if (parameters.Trim().ToLower() == "leave")
+                        {
+                            Net.LobbyNet.Client.DisconnectFromLobby();
+                        }
+                    }));
                 CommandsList.Add(new MenuCommand("Card",
                         "Generate a card",
                         delegate(string paramers){
-                            new GameProcedure();
+                            LingoCard card = new LingoCard(true, LingoCard.generateLingoCardMask());
+                            System.Console.WriteLine("Card: ");
+                            System.Console.WriteLine(card);
+
+                        }));
+                CommandsList.Add(new MenuCommand("Username",
+                        "Set a username",
+                        delegate(string parameters)
+                        {
+                            if((parameters != null) || (parameters != ""))
+                            {
+                                Config.LocalPlayer.Username = parameters;
+                                Config.SaveConfig();
+                            }
                         }));
                 CommandsList.Add(new MenuCommand("NetTest",
                     "Ping the server",
                     delegate(string parameters)
                     {
-                        if(Net.LobbyNet.Client.Init())
+                        if(!Net.LobbyNet.Client.IsConnected)
                         {
-                            System.Console.WriteLine("Connection established.");
-                            Net.LobbyNet.Client.Ping();
+                            if (!Net.LobbyNet.Client.Init())
+                            {
+                                System.Console.WriteLine("Connection failed");
+                                return;
+                            }
+                            System.Console.WriteLine("Connection established");
                         }
-
+                        Net.LobbyNet.Client.Ping();
                     }));
 
                 CommandsList.Add(new MenuCommand("Help",
@@ -139,7 +184,7 @@ namespace OpenLingoClient.Control
                         "Change language to argument",
                         delegate(string parameters)
                         {
-                            switch (parameters)
+                            switch (parameters.Trim().ToLower())
                             {
                                 case "nl":
                                     Config.Language = LANGUAGE.DUTCH;
@@ -185,16 +230,6 @@ namespace OpenLingoClient.Control
                                  Config.WordLength = temp;
                              }
                          }));
-                CommandsList.Add(new MenuCommand("Give",
-                        "Get a random word of set letters in set language",
-                        delegate(string parameters)
-                        {
-                            string randomWord = FileManager.GenerateRandomWord(Config.WordLength);
-                            if (randomWord != null)
-                                Console.WriteLine(randomWord);
-                            else
-                                Console.WriteLine("Failed.");
-                        }));
                 CommandsList.Add(new MenuCommand("Quit",
                           "Quit the application",
                           delegate(string parameters)

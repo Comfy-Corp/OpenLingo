@@ -81,22 +81,6 @@ namespace LingoLib
         }
     }
 
-    /**
-     * Player information
-     * Stores both match-specific and non-match-specific information
-     */
-    [Serializable]
-    public class Player
-    {
-        public int Score;
-        public string Name;
-
-        public Player(string name)
-        {
-            Name = name;
-        }
-    }
-
     public enum MatchResultType
     {
         WIN  = 1,

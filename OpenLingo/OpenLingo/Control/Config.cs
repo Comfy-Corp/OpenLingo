@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LingoLib;
+using System.Runtime.Serialization;
 
 namespace OpenLingoClient.Control
 {
@@ -65,11 +66,11 @@ namespace OpenLingoClient.Control
             }
         }
 
-        public static Player LocalPlayer
+        public static PlayerInfo LocalPlayer
         {
             get {
                 if (conf.LocalPlayer == null)
-                    LocalPlayer = new Player("Default");
+                    LocalPlayer = new PlayerInfo("Default");
                 return conf.LocalPlayer; 
             }
             set
@@ -86,7 +87,14 @@ namespace OpenLingoClient.Control
 
         static public void LoadConfig()
         {
-            conf = FileManager.ConfigLoad();
+            try
+            {
+                conf = FileManager.ConfigLoad();
+            }
+            catch(SerializationException)
+            {
+                conf = null;
+            }
             if (conf == null)
                 conf = new ConfigParameters();
         }

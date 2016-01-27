@@ -56,6 +56,30 @@ namespace OpenLingoClient.Control.Net
                 System.Console.WriteLine("Reply: " + (string) receivedPackage.transmittedObject);
             }
 
+            public static List<PlayerInfo> ConnectToLobby() //Also returns the current users 
+            {
+                List<PlayerInfo> retVal = new List<PlayerInfo>();
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.REGISTER_LOBBY, Config.LocalPlayer));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
+                if (receivedPackage.CommandName != LingoProtocol.OK)
+                    return retVal;
+                System.Console.WriteLine("Registration Success");
+                queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.REQUEST_LOBBY, Config.LocalPlayer));
+                receivedPackage = PackageManager.getInstance().request(queueNumber);
+                retVal = receivedPackage.transmittedObject as List<PlayerInfo>;
+                return retVal;
+            }
+
+            public static bool DisconnectFromLobby()
+            {
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.UNREGISTER_LOBBY, Config.LocalPlayer));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
+                if (receivedPackage.CommandName != LingoProtocol.OK)
+                  return false;
+                Console.WriteLine("Unregistration success");
+                return true;
+            }
+
             public static bool CertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
             {
                 if (sslPolicyErrors == SslPolicyErrors.None)

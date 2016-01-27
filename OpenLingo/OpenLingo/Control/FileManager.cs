@@ -7,6 +7,7 @@ using System.IO;
 using OpenLingoClient.Control.Net;
 using LingoLib;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
 
 namespace OpenLingoClient.Control
 {
@@ -44,7 +45,14 @@ namespace OpenLingoClient.Control
                 using (var stream = File.Open(configPath, FileMode.Open))
                 {
                     BinaryFormatter bFormatter = new BinaryFormatter();
-                    config = (ConfigParameters)bFormatter.Deserialize(stream);
+                    try
+                    {
+                        config = (ConfigParameters)bFormatter.Deserialize(stream);
+                    }
+                    catch (SerializationException) //This must be a new client verion, reset config
+                    {
+                        config = null; 
+                    }
                 }
             }
             catch (DirectoryNotFoundException)

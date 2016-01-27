@@ -10,7 +10,7 @@ namespace OpenLingoServer
     {
         static void Main(string[] args)
         {
-            Lobby.INSTANCE.LobbyListen();
+            Server.INSTANCE.LobbyListen();
         }
     }
 }
