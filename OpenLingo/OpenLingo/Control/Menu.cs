@@ -8,24 +8,9 @@ using LingoLib;
 
 namespace OpenLingoClient.Control
 {
-    public class Menu
+    //Console based menu for debugging
+    /*public class Menu
     {
-        private static MenuView _screen;
-        public static MenuView Screen
-        {
-            get
-            {
-                if (_screen == null)
-                {
-                    _screen = Config.IsDebug ? new MenuView(View.MenuView.ViewTypes.VIEW_CONSOLE) : new MenuView(View.MenuView.ViewTypes.VIEW_FORM);
-                }
-                return _screen;
-            }
-            set
-            {
-                _screen = value;
-            }
-        }
 
         public static Menu currentMenu;
 
@@ -33,14 +18,33 @@ namespace OpenLingoClient.Control
         {
             MenuCommands.Create();
             currentMenu = this;
+            Console.Title = "OpenLingo - Debug";
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine("\"give\" to generate a new word.");
+            Console.WriteLine("\"lang\" followed by EN or NL to change language. ex: lang EN");
+            Console.WriteLine("Use numbers to change length.");
+            Console.Write("Current word length: '" + Config.WordLength + "' current language: '");
+            switch (Config.Language)
+            {
+                case LANGUAGE.DUTCH:
+                    Console.Write("NL");
+                    break;
+                case LANGUAGE.ENGLISH:
+                    Console.Write("EN");
+                    break;
+                default:
+                    Console.Write("None");
+                    break;
+            }
+            Console.WriteLine("'.");
         }
 
         public void Heartbeat()
         {
-
+            
             if (Config.Language == LANGUAGE.NONE)
             {
-                switch(Screen.MenuSetLanguagePrompt().Trim().ToLower()){
+                switch(Console.ReadLine().Trim().ToLower()){
                     case "nl":
                         Config.Language = LANGUAGE.DUTCH;
                         break;
@@ -53,7 +57,7 @@ namespace OpenLingoClient.Control
                         break;
                  }
             }
-            string input = Screen.MenuRead();
+            string input = Console.ReadLine();
             input.ToLower().Trim();
             string command = input.Split()[0];
             string parameters = string.Empty;
@@ -72,8 +76,7 @@ namespace OpenLingoClient.Control
 
         public void CloseMenu()
         {
-            Screen.MenuExit();
-            Screen = null;
+            Console.WriteLine("Bye bye");
         }
 
         public void MenuCommand(string command, string parameters)
@@ -125,7 +128,7 @@ namespace OpenLingoClient.Control
                     {
                         if (parameters.Trim().ToLower() == "join")
                         {
-                            List<PlayerInfo> peers = Net.LobbyNet.Client.ConnectToLobby();
+                            List<PlayerInfo> peers = Net.ServerNet.Client.ConnectToLobby();
                             foreach (var peer in peers)
                             {
                                 System.Console.WriteLine(peer.Username);
@@ -133,7 +136,7 @@ namespace OpenLingoClient.Control
                         }
                         else if (parameters.Trim().ToLower() == "leave")
                         {
-                            Net.LobbyNet.Client.DisconnectFromLobby();
+                            Net.ServerNet.Client.DisconnectFromLobby();
                         }
                     }));
                 CommandsList.Add(new MenuCommand("Card",
@@ -158,16 +161,16 @@ namespace OpenLingoClient.Control
                     "Ping the server",
                     delegate(string parameters)
                     {
-                        if(!Net.LobbyNet.Client.IsConnected)
+                        if(!Net.ServerNet.Client.IsConnected)
                         {
-                            if (!Net.LobbyNet.Client.Init())
+                            if (!Net.ServerNet.Client.Init())
                             {
                                 System.Console.WriteLine("Connection failed");
                                 return;
                             }
                             System.Console.WriteLine("Connection established");
                         }
-                        Net.LobbyNet.Client.Ping();
+                        Net.ServerNet.Client.Ping();
                     }));
 
                 CommandsList.Add(new MenuCommand("Help",
@@ -266,5 +269,5 @@ namespace OpenLingoClient.Control
                 }
             }
         }
-    }
+    }*/
 }

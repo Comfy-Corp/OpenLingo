@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Control\Class1.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="HttpHandler.cs" />
     <Compile Include="Lobby.cs" />
+    <Compile Include="MatchManager.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +62,9 @@
       <Project>{12285e5c-8a4f-4eb4-9c7f-731c93354b57}</Project>
       <Name>OpenLingoLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="wordsEn.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

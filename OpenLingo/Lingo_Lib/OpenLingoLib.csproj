@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="GameInfo.cs" />
     <Compile Include="LingoCard.cs" />
     <Compile Include="LingoProtocol.cs" />
     <Compile Include="MatchInfo.cs" />

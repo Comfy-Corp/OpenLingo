@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 using OpenLingoClient.Control;
 using LingoLib;
 
-namespace OpenLingoClient.View
+namespace OpenLingoClient.ViewOld
 {
+    /**
+     * I announce this method deprecated
+     * It was impractical for the scope of this project
+     *
     public class MenuView
     {
         private IViewBridge viewInterface;
@@ -99,33 +103,6 @@ namespace OpenLingoClient.View
 
         private class ConsoleView : IViewBridge
         {
-            public void MenuStart()
-            {
-                Console.Title = "OpenLingo - Debug";
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine("\"give\" to generate a new word.");
-                Console.WriteLine("\"lang\" followed by EN or NL to change language. ex: lang EN");
-                Console.WriteLine("Use numbers to change length.");
-                Console.Write("Current word length: '" + Config.WordLength + "' current language: '");
-                switch (Config.Language)
-                {
-                    case LANGUAGE.DUTCH:
-                        Console.Write("NL");
-                        break;
-                    case LANGUAGE.ENGLISH:
-                        Console.Write("EN");
-                        break;
-                    default:
-                        Console.Write("None");
-                        break;
-                }
-                Console.WriteLine("'.");
-            }
-
-            public void MenuExit()
-            {
-                Console.WriteLine("Bye bye");
-            }
 
             public string MenuSetLanguagePrompt()
             {
@@ -142,7 +119,7 @@ namespace OpenLingoClient.View
 
             public void MenuDisplayVer()
             {
-                Console.WriteLine("Words list Version: " + Config.WordsListVersion);
+                
             }
 
             public void MenuDisplayWordlength()
@@ -154,18 +131,7 @@ namespace OpenLingoClient.View
             {
                 Console.Write('>');
                 return Console.ReadLine();
-                /*
-                int temp;
-                if (!int.TryParse(input, out temp))
-                {
-                 * 
-                }
-                else
-                {
-                    Config.WordLength = temp;
-                    Console.WriteLine("Words will be " + Config.WordLength + " letters.");
-                }*/
             }
         }
-    }
+    }*/
 }

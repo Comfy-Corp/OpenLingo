@@ -31,7 +31,7 @@ namespace OpenLingoClient.Control
                 }
         }
 
-        public static int GuessAttempts //Word length may not be 0
+        /*public static int GuessAttempts //Amount of guesses may not be 0
         {
             get
             {
@@ -47,9 +47,9 @@ namespace OpenLingoClient.Control
                     conf.GuessAttempts = value;
                 SaveConfig();
             }
-        }
+        }*/
 
-        public static int WordLength //Word length may not be below 1
+        /*public static int WordLength //Word length may not be below 1
         {
             get {
                 if (conf.WordLength <= 0)
@@ -64,7 +64,7 @@ namespace OpenLingoClient.Control
                     conf.WordLength = value;
                 SaveConfig();
             }
-        }
+        }*/
 
         public static PlayerInfo LocalPlayer
         {

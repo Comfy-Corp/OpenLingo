@@ -8,14 +8,22 @@ namespace LingoLib
 {
     public enum LingoProtocol
     {
-        PING = 255,             //Parameter: string
-        CONNECTION_END = 254,   //Parameter: none
-        REGISTER_LOBBY = 253,   //Parameter: PlayerInfo
-        UNREGISTER_LOBBY = 252, //Parameter: PlayerInfo 
-        REQUEST_MATCHUP = 251,  //Parameter: PlayerInfo
-        ACCEPT_MATCHUP = 250,   //Parameter: PlayerInfo
-        REQUEST_LOBBY = 249,    //Parameter: List<PlayerInfo>
-        NOK = 1,                //Parameter: string
-        OK = 0                  //Parameter: string
+        /* Lobby packages */    //             Server             Client
+        REGISTER_LOBBY,         //Parameter:      -             PlayerInfo
+        UNREGISTER_LOBBY,       //Parameter:      -             PlayerInfo 
+        REQUEST_MATCHUP,        //Parameter: PlayerInfo         PlayerInfo
+        ACCEPT_MATCHUP,         //Parameter: PlayerInfo         PlayerInfo
+        GET_LOBBY_PLAYERS,      //Parameter: List<PlayerInfo>   null
+        REQUEST_TEAMUP,         //Parameter:      -             PlayerInfo
+        START_GAME,             //Parameter: List<PlayerInfo>   
+        /* Game packages */
+        TRANSFER_CARD,          //Parameter: LingoCard          null
+        PROMPT_GUESS,           //Parameter: MatchSession       string
+
+        /* Common packages */
+        PING,                   //Parameter: string             string
+        CONNECTION_END,         //Parameter: none               PlayerInfo
+        NOK,                    //Parameter: string             string
+        OK                      //Parameter: string             string
     }
 }

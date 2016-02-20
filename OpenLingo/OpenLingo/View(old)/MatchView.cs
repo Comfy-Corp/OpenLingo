@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LingoLib;
 
-namespace OpenLingoClient.View
+namespace OpenLingoClient.ViewOld
 {
     /**
      * Secondary singleton non abstract view adapter container.

@@ -63,7 +63,7 @@ namespace OpenLingoServer
                 return retVal;
             };
 
-            Commands[LingoProtocol.REQUEST_LOBBY] = (parameters) =>
+            Commands[LingoProtocol.GET_LOBBY_PLAYERS] = (parameters) =>
             {
                 Package retVal = new Package(LingoProtocol.OK, Lobby.Players);
                 return retVal;

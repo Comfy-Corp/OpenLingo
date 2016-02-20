@@ -13,7 +13,11 @@ namespace LingoLib
         //Because there will be so little players
         //That names are unique
         public string Username;
-        public bool isInGame;
+        public PlayerInfo TeamMate;
+
+        public int score;
+
+        public PlayerState state;
 
         public PlayerInfo(string username)
         {
@@ -27,5 +31,11 @@ namespace LingoLib
             if (objAsPlayerInfo == null) return false;
             else return (objAsPlayerInfo.Username == this.Username);
         }
+    }
+
+    public enum PlayerState{
+        IN_LOBBY,
+        OPENING,
+        TURN
     }
 }
