@@ -20,7 +20,6 @@ namespace OpenLingoClient
         {
             /*if(args.Length > 0 && args[0].Equals("-debug"))
                 Config.IsDebug = true;*/
-            OpenLingoClient.Control.Net.ServerNet.Client.Init();
             //Control.Menu menu = new Control.Menu();
             //Debug console menu
             //while(isRunning) 

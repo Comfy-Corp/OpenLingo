@@ -13,6 +13,13 @@ namespace LingoLib
         public object transmittedObject;
         public int queueNumber;
 
+        public Package(Package otherPackage)
+        {
+            this.CommandName = otherPackage.CommandName;
+            this.transmittedObject = otherPackage.transmittedObject;
+            this.queueNumber = otherPackage.queueNumber;
+        }
+
         public Package(LingoProtocol CommandName, object transmittedObject)
         {
             this.CommandName = CommandName;
