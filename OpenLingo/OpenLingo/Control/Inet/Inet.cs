@@ -14,61 +14,68 @@ using System.Threading;
 
 namespace OpenLingoClient.Control.Net
 {
+    /**
+     * Provide a means of finding other players and constructing a game 
+     */
     public class ServerNet
     {
         public class Client
         {
             #region fields
+            public static BinaryFormatter formatter = new BinaryFormatter();
+            public static TcpClient client;
+            public static SslStream stream;
             public static IPAddress localAddr = IPAddress.Parse("127.0.0.1");
             public static int port = 6699;
-         
-            private static PackageManager packageManager = new PackageManager(localAddr, port);
 
             public static bool IsConnected = false;
             #endregion
 
-            public static void RetryConnect()
+
+            public static bool Init()
             {
-                packageManager.Dispose();
-                packageManager = new PackageManager(localAddr, port);
+                if (!IsConnected)
+                {
+                    try
+                    {
+                        client = new TcpClient(localAddr.ToString(), port);
+                        stream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(CertificateValidationCallback));
+                        stream.AuthenticateAsClient("OpenLingo");
+                        IsConnected = true;
+                    }
+                    catch(Exception)
+                    {
+                        IsConnected = false;
+                    }
+                }
+                return IsConnected;
             }
 
             public static void Ping()
             {
-                int queueNumber = packageManager.add(new Package(LingoProtocol.PING, "Pong"));
-                Package receivedPackage = packageManager.request(queueNumber);
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.PING, "Pong"));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
                 System.Console.WriteLine("Reply: " + (string) receivedPackage.transmittedObject);
             }
 
-            public static bool RegisterToLobby() //Also returns the current users 
-            {
-                int queueNumber = packageManager.add(new Package(LingoProtocol.REGISTER_LOBBY, Config.LocalPlayer));
-                Package receivedPackage = packageManager.request(queueNumber);
-                if (receivedPackage == null || receivedPackage.CommandName != LingoProtocol.OK)
-                    return false; 
-                System.Console.WriteLine("Registration Success");
-                return true;
-            }
-
-            public static bool TryGetLobbyPlayers(out List<PlayerInfo> players)
+            public static List<PlayerInfo> ConnectToLobby() //Also returns the current users 
             {
                 List<PlayerInfo> retVal = new List<PlayerInfo>();
-                int queueNumber = packageManager.add(new Package(LingoProtocol.GET_LOBBY_PLAYERS, Config.LocalPlayer));
-                Package receivedPackage = packageManager.request(queueNumber);
-                if(receivedPackage == null)
-                {
-                    players = null;
-                    return false;
-                }
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.REGISTER_LOBBY, Config.LocalPlayer));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
+                if (receivedPackage.CommandName != LingoProtocol.OK)
+                    return retVal;
+                System.Console.WriteLine("Registration Success");
+                queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.GET_LOBBY_PLAYERS, Config.LocalPlayer));
+                receivedPackage = PackageManager.getInstance().request(queueNumber);
                 retVal = receivedPackage.transmittedObject as List<PlayerInfo>;
-                players = retVal;
-                return true;
+                return retVal;
             }
 
             public static bool DisconnectFromLobby()
             {
-                int queueNumber = packageManager.add(new Package(LingoProtocol.UNREGISTER_LOBBY, Config.LocalPlayer));
-                Package receivedPackage = packageManager.request(queueNumber);
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.UNREGISTER_LOBBY, Config.LocalPlayer));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
                 if (receivedPackage.CommandName != LingoProtocol.OK)
                   return false;
                 Console.WriteLine("Unregistration success");
@@ -82,37 +89,30 @@ namespace OpenLingoClient.Control.Net
                 return false;
             }
 
+            public static void Disconnect()
+            {
+                PackageManager.getInstance().add(new Package(LingoProtocol.CONNECTION_END, null));
+                stream.Flush();
+                stream.Close();
+                client.Close();
+            }
         }
- 
-        private class PackageManager : IDisposable
+
+        public class PackageManager
         {
-            
             #region fields
+            private static PackageManager INSTANCE = new PackageManager();
+
             private List<Package> receivingPackageList = new List<Package>();
             private int currentQueueNumber = 0;
-            public bool isInitialised = false;
 
             private object currentQueueNumberLock = new object();
 
-            public bool allowTraffic = true;            
-            public event EventHandler DisconnectEvent;
-
-            public static BinaryFormatter formatter = new BinaryFormatter();
-            public static TcpClient client;
-            public static SslStream stream;
+            public bool allowTraffic = true;
             #endregion
 
-            /**
-             * A package manager instance attempts to connect to a given ip and port
-             * and can send requests to a LingoServer.
-             * Traffic is always reactive, which isn't really the best option here.
-             * This is more threadsafe though, which is easy to display
-             */
-            public PackageManager(IPAddress ip, int port)
+            private PackageManager()
             {
-                Client.IsConnected = Init(ip, port);
-                if (!Client.IsConnected)
-                    return;
                 #region initializeReceivingThread
                 ThreadPool.QueueUserWorkItem(delegate
                 {
@@ -124,7 +124,7 @@ namespace OpenLingoClient.Control.Net
                             {
                                 Package package = null;
 
-                                package = (Package) formatter.Deserialize(stream);
+                                package = (Package)Client.formatter.Deserialize(Client.stream);
 
                                 lock (receivingPackageList)
                                 {
@@ -139,37 +139,21 @@ namespace OpenLingoClient.Control.Net
                 #endregion
             }
 
-            private static bool Init(IPAddress ip, int port)
+            public static PackageManager getInstance()
             {
-                try
-                {
-                    client = new TcpClient(ip.ToString(), port);
-                    stream = new SslStream(client.GetStream(), false, new RemoteCertificateValidationCallback(Client.CertificateValidationCallback));
-                    stream.AuthenticateAsClient("OpenLingo");
-                    Client.IsConnected = true;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Package manager init failed: "+e.Message);
-                    Console.WriteLine("Destination "+ip.ToString()+":"+port);
-                    return false; //Regard any exceptions as server unreachable.
-                }
-                return true;
+                return INSTANCE;
             }
-
 
             public int add(Package package)
             {
-                if (!isInitialised)
-                    return -1;
                 try
                 {
                     lock (currentQueueNumberLock)
                     {
                         package.queueNumber = getUniqueQueueNumber();
                     }
-                    lock (stream)
-                        formatter.Serialize(stream, package);
+                    lock (Client.stream)
+                        Client.formatter.Serialize(Client.stream, package);
                 }
                 catch
                 { }
@@ -179,8 +163,6 @@ namespace OpenLingoClient.Control.Net
 
             public Package request(int queueNumber)
             {
-                if (!isInitialised)
-                    return null;
                 int attempts = 0;
                 while (true)
                 {
@@ -202,10 +184,7 @@ namespace OpenLingoClient.Control.Net
                     }
                     Thread.Sleep(10);
                     if (attempts++ > 100)
-                    {
-                        DisconnectEvent(this,null);
                         return null;
-                    }
                 }
             }
 
@@ -220,29 +199,9 @@ namespace OpenLingoClient.Control.Net
                     return currentQueueNumber = 0;
                 }
             }
-
-            public void Dispose()
-            {
-                add(new Package(LingoProtocol.CONNECTION_END, null));
-                try
-                {
-                    if (stream != null)
-                    {
-                        stream.Flush();
-                        stream.Close();
-                    }
-                    if(client != null)
-                        client.Close();
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("Unable to properly close streams");
-                    Console.WriteLine("Reason: "+e.Message);
-                }
-            }
         }
 
-        /**public class PackageReceivedEventArgs : EventArgs
+        public class PackageReceivedEventArgs : EventArgs
         {
             public Package ReceivedPackage;
 
@@ -250,6 +209,6 @@ namespace OpenLingoClient.Control.Net
             {
                 this.ReceivedPackage = ReceivedPackage;
             }
-        }*/
+        }
     }
 }

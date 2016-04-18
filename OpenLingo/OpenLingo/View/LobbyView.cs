@@ -19,13 +19,13 @@ namespace OpenLingoClient.View
         public LobbyView()
         {
             InitializeComponent();
-            this.ConnectedLabel.ForeColor = (ServerNet.Client.IsConnected) ? Color.Green : Color.Red;
+            this.ConnectedLabel.ForeColor = (ServerNet.Client.Init()) ? Color.Green : Color.Red;
             RefreshLobby();
         }
 
         public void RefreshLobby()
         {
-            if (!OpenLingoClient.Control.Net.ServerNet.Client.TryGetLobbyPlayers(out DisplayNames))
+            if ((DisplayNames = OpenLingoClient.Control.Net.ServerNet.Client.ConnectToLobby()) == null)
                 return;
             string display = "";
             DisplayNames.ForEach(x => display+=x.Username+"\n"); //build string
@@ -34,8 +34,7 @@ namespace OpenLingoClient.View
 
         private void ConnectedLabel_Click(object sender, EventArgs e)
         {
-            ServerNet.Client.RetryConnect();
-            this.ConnectedLabel.ForeColor = ServerNet.Client.IsConnected ? Color.Green : Color.Red;
+            this.ConnectedLabel.ForeColor = (ServerNet.Client.Init()) ? Color.Green : Color.Red;
         }
 
         private void RefreshButton_Click(object sender, EventArgs e)
