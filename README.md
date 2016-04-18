@@ -2,8 +2,6 @@
 Basic C# application involving basic networking using SSL sockets and file IO
 Uses a client-server pattern.
 
-***THIS REPO HAS BEEN ABANDONED FOR https://github.com/Comfy-Corp/OpenLingo***
-
 ##Running OpenLingo
 
 OpenLingo currently has no central server.
