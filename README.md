@@ -1,12 +1,12 @@
 # OpenLingo
 Basic C# application involving basic networking using SSL sockets and file IO
-Uses a client-server pattern.
+Based on the client-server and Model-View-Controller patterns.
 
 ##Running OpenLingo
 
 OpenLingo currently has no central server.
-You are required to start a server locally first, once this gives the OK you may add clients.
-Clients start by connecting to the lobby hosted by the server. You can confirm it works by seeing the server
+You are required to start a server locally first, once this gives the OK you start clients to connect to the server.
+Clients start by connecting to the lobby hosted by the server. You can confirm that it works by seeing the server
 print an acknowledgement that a client has connected. Once multiple clients are connected, they will be able to see
 all other clients present in the lobby listed.
 
