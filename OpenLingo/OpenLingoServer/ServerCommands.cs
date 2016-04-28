@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Security;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using LingoLib;
 
 namespace OpenLingoServer
@@ -28,23 +23,30 @@ namespace OpenLingoServer
             return Commands[CommandName];
         }
 
+        //Want to hear a fun thing you can do with this?
+        //Imagine the following
+        //Make a live interpreter for the server, and hot swap the commands.
+        //And then we're Erlang-like and have (moderate) live patching of commands.
+        //Never gonna make that though
         private void GenerateCommands()
         {
             Commands[LingoProtocol.PING] = (parameters) =>
             {
                 Package retVal = new Package(LingoProtocol.PING, "Pong");
-                System.Console.WriteLine("Received " + (string) parameters.transmittedObject);
+                Console.WriteLine("Received " + (string) parameters.transmittedObject);
                 return retVal;
             };
 
             Commands[LingoProtocol.REGISTER_LOBBY] = (parameters) =>
             {
                 Package retVal = new Package(LingoProtocol.NOK, "Failed to register in the lobby. Reason unknown.");
-                Lobby.Players.Add(parameters.transmittedObject as PlayerInfo);
-                if (Lobby.Players.Contains(parameters.transmittedObject as PlayerInfo))
+                PlayerInfo newPlayer = parameters.transmittedObject as PlayerInfo;
+                if (!Lobby.AddUnique(parameters.transmittedObject as PlayerInfo))
+                    retVal = new Package(LingoProtocol.ALREADY_REGISTERED, "The user \"" + newPlayer.Username+"\" has already been registered.");
+                else if (Lobby.Players.Contains(parameters.transmittedObject as PlayerInfo))
                 {
                     PlayerInfo a = parameters.transmittedObject as PlayerInfo;
-                    System.Console.WriteLine("Registered user: " + a.Username);
+                    Console.WriteLine("Registered user: " + a.Username);
                     retVal = new Package(LingoProtocol.OK, "Success");
                 }
                 return retVal;
@@ -57,12 +59,12 @@ namespace OpenLingoServer
                 Lobby.Players.Remove(toRemove);
                 if (!Lobby.Players.Contains(toRemove))
                 {
-                    System.Console.WriteLine("Unregistered user: " + toRemove.Username);
+                    Console.WriteLine("Unregistered user: " + toRemove.Username);
                     retVal = new Package(LingoProtocol.OK, "Success");
                 }
                 return retVal;
             };
-
+           
             Commands[LingoProtocol.GET_LOBBY_PLAYERS] = (parameters) =>
             {
                 Package retVal = new Package(LingoProtocol.OK, Lobby.Players);

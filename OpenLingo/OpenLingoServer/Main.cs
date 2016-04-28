@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenLingoServer
-{
+namespace OpenLingoServer {
     class MainClass
     {
         static void Main(string[] args)

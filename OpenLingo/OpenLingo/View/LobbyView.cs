@@ -25,10 +25,10 @@ namespace OpenLingoClient.View
 
         public void RefreshLobby()
         {
-            if ((DisplayNames = OpenLingoClient.Control.Net.ServerNet.Client.ConnectToLobby()) == null)
+            if ((DisplayNames = ServerNet.Client.ConnectToLobby()) == null)
                 return;
             string display = "";
-            DisplayNames.ForEach(x => display+=x.Username+"\n"); //build string
+            DisplayNames.ForEach(x => { display += x.Username + "\n"; Console.WriteLine("User: " + x.Username); } ); //build string
             playersBox.Text = display;
         }
 
@@ -37,9 +37,7 @@ namespace OpenLingoClient.View
             this.ConnectedLabel.ForeColor = (ServerNet.Client.Init()) ? Color.Green : Color.Red;
         }
 
-        private void RefreshButton_Click(object sender, EventArgs e)
-        {
+        private void RefreshButton_Click(object sender, EventArgs e) => 
             RefreshLobby();
-        }
     }
 }

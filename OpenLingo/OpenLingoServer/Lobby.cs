@@ -11,6 +11,14 @@ namespace OpenLingoServer
     {
         public static List<PlayerInfo> Players = new List<PlayerInfo>();
 
+        public static bool AddUnique(PlayerInfo newPlayer)
+        {
+            if (Players.Contains(newPlayer))
+                return false;
+            Players.Add(newPlayer);
+            return true;
+        }
+
         public static List<string> GetPlayerNames()
         {
             List<string> usernames = new List<string>();

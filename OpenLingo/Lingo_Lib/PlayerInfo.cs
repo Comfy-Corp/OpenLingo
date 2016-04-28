@@ -11,11 +11,11 @@ namespace LingoLib
     {
         //I'm assuming there is no need for an ID
         //Because there will be so little players
-        //That names are unique
+        //That names *must* be unique
         public string Username;
-        public PlayerInfo TeamMate;
+        public PlayerInfo TeamMate; //Unimplemented
 
-        public int score;
+        public int score; //
 
         public PlayerState state;
 
@@ -30,6 +30,11 @@ namespace LingoLib
             PlayerInfo objAsPlayerInfo = obj as PlayerInfo;
             if (objAsPlayerInfo == null) return false;
             else return (objAsPlayerInfo.Username == this.Username);
+        }
+
+        public override int GetHashCode()
+        {
+            return Username.GetHashCode(); //Usernames must be unique, so they can be used to distinguish PlayerInfo
         }
     }
 

@@ -63,12 +63,22 @@ namespace OpenLingoClient.Control.Net
                 List<PlayerInfo> retVal = new List<PlayerInfo>();
                 int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.REGISTER_LOBBY, Config.LocalPlayer));
                 Package receivedPackage = PackageManager.getInstance().request(queueNumber);
-                if (receivedPackage.CommandName != LingoProtocol.OK)
-                    return retVal;
-                System.Console.WriteLine("Registration Success");
-                queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.GET_LOBBY_PLAYERS, Config.LocalPlayer));
-                receivedPackage = PackageManager.getInstance().request(queueNumber);
-                retVal = receivedPackage.transmittedObject as List<PlayerInfo>;
+                if (receivedPackage.CommandName == LingoProtocol.ALREADY_REGISTERED) { 
+                    Console.WriteLine("Already Registered on the server");
+                   return GetLobbyPlayers();
+                }
+                if ((receivedPackage == null) || receivedPackage.CommandName != LingoProtocol.OK)
+                    Console.WriteLine("Invalid or no response.");
+                return retVal; //Connection probably not working
+            }
+
+            public static List<PlayerInfo> GetLobbyPlayers()
+            {
+                List<PlayerInfo> retVal = new List<PlayerInfo>();
+                int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.GET_LOBBY_PLAYERS, Config.LocalPlayer));
+                Package receivedPackage = PackageManager.getInstance().request(queueNumber);
+                if(receivedPackage != null)
+                    retVal = receivedPackage.transmittedObject as List<PlayerInfo>;
                 return retVal;
             }
 
@@ -164,6 +174,8 @@ namespace OpenLingoClient.Control.Net
             public Package request(int queueNumber)
             {
                 int attempts = 0;
+                if(!Client.IsConnected)
+                    return null;                    
                 while (true)
                 {
                     lock (receivingPackageList)
