@@ -63,12 +63,16 @@ namespace OpenLingoClient.Control.Net
                 List<PlayerInfo> retVal = new List<PlayerInfo>();
                 int queueNumber = PackageManager.getInstance().add(new Package(LingoProtocol.REGISTER_LOBBY, Config.LocalPlayer));
                 Package receivedPackage = PackageManager.getInstance().request(queueNumber);
-                if (receivedPackage.CommandName == LingoProtocol.ALREADY_REGISTERED) { 
-                    Console.WriteLine("Already Registered on the server");
-                   return GetLobbyPlayers();
-                }
                 if ((receivedPackage == null) || receivedPackage.CommandName != LingoProtocol.OK)
+                {
                     Console.WriteLine("Invalid or no response.");
+                    return retVal;
+                }
+                if (receivedPackage.CommandName == LingoProtocol.ALREADY_REGISTERED)
+                {
+                    Console.WriteLine("Already Registered on the server");
+                    return GetLobbyPlayers();
+                }
                 return retVal; //Connection probably not working
             }
 
