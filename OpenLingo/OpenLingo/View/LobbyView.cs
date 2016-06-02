@@ -12,6 +12,8 @@ using OpenLingoClient.Control.Net;
 
 namespace OpenLingoClient.View
 {
+    //I have come to vastly prefer MVVM over MVC over the years.
+    //But I already locked myself by choosing this when I first started.
     public partial class LobbyView : Form
     {
         List<PlayerInfo> DisplayNames;
@@ -20,10 +22,10 @@ namespace OpenLingoClient.View
         {
             InitializeComponent();
             this.ConnectedLabel.ForeColor = (ServerNet.Client.Init()) ? Color.Green : Color.Red;
-            RefreshLobby();
+            RefreshLobbyList();
         }
 
-        public void RefreshLobby()
+        public void RefreshLobbyList()
         {
             if ((DisplayNames = ServerNet.Client.ConnectToLobby()) == null)
                 return;
@@ -38,6 +40,6 @@ namespace OpenLingoClient.View
         }
 
         private void RefreshButton_Click(object sender, EventArgs e) => 
-            RefreshLobby();
+            RefreshLobbyList();
     }
 }
